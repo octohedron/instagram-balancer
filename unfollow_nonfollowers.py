@@ -2,7 +2,7 @@
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
+from pprint import pprint
 from util.extractor import extract_followers_list, unfollow_non_followers
 from util.login_util import login_user
 from os import environ
@@ -36,6 +36,8 @@ try:
         print('Logged in successfully!')
         following_list, following_amount = extract_followers_list(
             browser, INSTA_USER)
+        pprint("following_list")
+        pprint(following_list)
         unfollow_non_followers(browser, INSTA_USER,
                                following_list, following_amount)
 

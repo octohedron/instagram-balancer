@@ -3,6 +3,7 @@ from time import sleep
 from re import findall
 import random
 import math
+from pprint import pprint
 import decimal
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
@@ -66,33 +67,39 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
     scrolls = math.floor(following_amount / 10) + 1
     # Go by 10
     for x in range(0, scrolls):
+        pprint("Starting with scroll " + str(x))
         # For index starting at current scroll position
         # ending at the bottom of the list of the current scroll
         ending = x * 10 + 10
         # if we are at the last scroll
         if x == scrolls:
-            ending = following_amount
+            ending = following_amount - 1
+        pprint("Scroll ends at " + str(ending))
         for y in range(x * 10, ending):  # i.e. 60 to 70 or 0 to 10
             # Inspect, each item on the list
             # if the account if being followed but not in the followers list
             # press the unfollow button
             # then sleep
             account_link = following[y].find_element_by_xpath(
-                '//a[contains(@class, "_2g7d5")]')
+                './/a[contains(@class, "_2g7d5")]')
             account_name = account_link.get_attribute("href").split("/")[-2]
+            pprint("Analyzing " + account_name)
             if account_name not in following_list:
+                pprint(account_name + " not in following_list, unfollowing")
                 unfollow_button = following[y].find_element_by_xpath(
-                    '//button[contains(@class, "_qv64e _t78yp _4tgw8 _njrw0")]')
+                    './/button[contains(@class, "_qv64e _t78yp _4tgw8 _njrw0")]')
                 unfollow_button.click()
                 do_sleep(0, 300)
             do_sleep(0, 200)
         # Do a scroll
         try:
+            pprint("Try to scroll to " + str(x * 10 + 10) + " item")
             browser.execute_script(
                 "arguments[0].scrollIntoView(true)",
-                browser.find_elements_by_class_name("_6e4x5")[x * 10])
+                browser.find_elements_by_class_name("_6e4x5")[x * 10 + 10])
         except IndexError:
             index = following_amount - 1
+            pprint("Index error, trying to scroll, scrolling to " + str(index))
             browser.execute_script(
                 "arguments[0].scrollIntoView(true)",
                 browser.find_elements_by_class_name("_6e4x5")[index])
