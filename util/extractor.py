@@ -11,6 +11,7 @@ from selenium.webdriver.common.keys import Keys
 SLEEP_UPPER = 800
 SLEEP_LOWER = 1
 
+
 def get_user_info(browser):
     """Get the basic user info from the profile screen"""
 
@@ -82,16 +83,20 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
             # if the account if being followed but not in the followers list
             # press the unfollow button
             # then sleep
-            account_link = following[y].find_element_by_xpath(
-                './/a[contains(@class, "_2g7d5")]')
-            account_name = account_link.get_attribute("href").split("/")[-2]
-            pprint("Analyzing " + account_name)
-            if account_name not in following_list:
-                pprint(account_name + " not in following_list, unfollowing")
-                unfollow_button = following[y].find_element_by_xpath(
-                    './/button[contains(@class, "_qv64e _t78yp _4tgw8 _njrw0")]')
-                unfollow_button.click()
-                do_sleep(SLEEP_LOWER, SLEEP_UPPER)
+            try:
+                account_link = following[y].find_element_by_xpath(
+                    './/a[contains(@class, "_2g7d5")]')
+                account_name = account_link.get_attribute(
+                    "href").split("/")[-2]
+                pprint("Analyzing " + account_name)
+                if account_name not in following_list:
+                    pprint(account_name + " not in following_list, unfollowing")
+                    unfollow_button = following[y].find_element_by_xpath(
+                        './/button[contains(@class, "_qv64e _t78yp _4tgw8 _njrw0")]')
+                    unfollow_button.click()
+                    do_sleep(SLEEP_LOWER, SLEEP_UPPER)
+            except IndexError:
+                return
             do_sleep(SLEEP_LOWER, SLEEP_UPPER)
         # Do a scroll
         try:
