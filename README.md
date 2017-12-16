@@ -1,13 +1,15 @@
 # Instagram balancer
 
-Unfollows anyone that doesn't follow you back, most of them are bots anyways.
+Tired of following bots? Try this awesome tool
 
-It uses selenium to get all the information so install it with:
+Probably works with Python 2, but it's tested on Python 3
+
+It uses selenium, install it with:
 ```bash
-pip install selenium
+pip3 install selenium
 ```
 
-Install the proper `chromedriver` for your operating system.  Once you (download it)[https://sites.google.com/a/chromium.org/chromedriver/downloads] just drag and drop it into the `instagram-profilecrawl` directory.
+Install the proper `chromedriver` for your operating system.  Once you [download it](https://sites.google.com/a/chromium.org/chromedriver/downloads) just drag and drop it into the `instagram-profilecrawl` directory.
 
 ## Use it!
 
@@ -17,4 +19,4 @@ $ export INSTA_USER=your_user
 $ python3 unfollow_nonfollowers.py
 ```
 
-## Example results 
+Props to [@timgrossmann](https://github.com/timgrossmann) for inspiration
