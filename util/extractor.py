@@ -8,8 +8,12 @@ import decimal
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
-SLEEP_UPPER = 800
-SLEEP_LOWER = 1
+# Sleep values for 1 to 8 seconds
+SHORTSLEEP_UPPER = 800
+SHORTSLEEP_LOWER = 1
+# Sleep values for 300 to 480 seconds
+SLEEP_UPPER = 48000
+SLEEP_LOWER = 30000
 
 
 def get_user_info(browser):
@@ -33,7 +37,7 @@ def extract_followers_list(browser, username):
     followers_button = body_elem.find_element_by_xpath(
         '//a[contains(@class, "_t98z6")]')
     followers_button.click()
-    do_sleep(SLEEP_LOWER, SLEEP_UPPER)
+    do_sleep(SHORTSLEEP_LOWER, SLEEP_UPPER)
     usernames = []
     # This should keep going until there's no more to scroll
     while (len(browser.find_elements_by_class_name("_6e4x5")) <
@@ -54,12 +58,12 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
     following_button = body_elem.find_elements_by_class_name(
         '_t98z6')[2]
     following_button.click()
-    do_sleep(SLEEP_LOWER, SLEEP_UPPER)
+    do_sleep(SHORTSLEEP_LOWER, SLEEP_UPPER)
     # This should keep going until there's no more to scroll
     while (len(browser.find_elements_by_class_name("_6e4x5")) <
             following_amount):
         scroll_for_loading_list(browser)
-    do_sleep(SLEEP_LOWER, SLEEP_UPPER)
+    do_sleep(SHORTSLEEP_LOWER, SLEEP_UPPER)
     # Complete list of following elements
     following = browser.find_elements_by_class_name("_6e4x5")
     # Scroll to the top of the list
@@ -88,7 +92,7 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
                     './/a[contains(@class, "_2g7d5")]')
                 account_name = account_link.get_attribute(
                     "href").split("/")[-2]
-                pprint("Analyzing " + account_name)
+                pprint("Checking " + account_name)
                 if account_name not in following_list:
                     pprint(account_name + " not in following_list, unfollowing")
                     unfollow_button = following[y].find_element_by_xpath(
@@ -97,7 +101,7 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
                     do_sleep(SLEEP_LOWER, SLEEP_UPPER)
             except IndexError:
                 return
-            do_sleep(SLEEP_LOWER, SLEEP_UPPER)
+            do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
         # Do a scroll
         try:
             pprint("Try to scroll to " + str(x * 10 + 10) + " item")
@@ -118,12 +122,12 @@ def scroll_for_loading_list(browser):
         "arguments[0].scrollIntoView(true)",
         browser.find_elements_by_class_name("_6e4x5")[-1])
     # sleep between 0 and 2 seconds
-    do_sleep(SLEEP_LOWER, SLEEP_UPPER)
+    do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
     # Will throw index out of range if you have less than 5 followers
     browser.execute_script(
         "arguments[0].scrollIntoView(true)",
         browser.find_elements_by_class_name("_6e4x5")[-5])
-    do_sleep(SLEEP_LOWER, SLEEP_UPPER)
+    do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
     browser.execute_script(
         "arguments[0].scrollIntoView(true)",
         browser.find_elements_by_class_name("_6e4x5")[-1])
