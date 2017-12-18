@@ -19,8 +19,6 @@ $ export INSTA_USER=your_user
 $ python3 unfollow_nonfollowers.py
 ```
 
-Props to [@timgrossmann](https://github.com/timgrossmann) for inspiration
-
 
 Careful with abusing it or you will get banned/blocked.
 According to some sources, you can follow/unfollow around 600 accounts a day, so it's tuned to do that in around 8 hours.
