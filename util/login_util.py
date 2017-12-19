@@ -1,5 +1,5 @@
 """Module only used for the login part of the script"""
-from .time_util import sleep
+from .extractor import do_sleep
 from selenium.webdriver.common.action_chains import ActionChains
 
 
@@ -31,7 +31,7 @@ def login_user(browser, username, password, switch_language=True):
 
     ActionChains(browser).move_to_element(input_username[0]). \
         click().send_keys(username).perform()
-    sleep(1)
+    do_sleep(100, 200)
     input_password = browser.find_elements_by_xpath(
         "//input[@name='password']")
     ActionChains(browser).move_to_element(input_password[0]). \
@@ -41,7 +41,7 @@ def login_user(browser, username, password, switch_language=True):
         "//form/span/button[text()='Log in']")
     ActionChains(browser).move_to_element(login_button).click().perform()
 
-    sleep(5)
+    do_sleep(200, 500)
 
     # Check if user is logged-in (If there's two 'nav' elements)
     nav = browser.find_elements_by_xpath('//nav')

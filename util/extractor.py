@@ -37,7 +37,7 @@ def extract_followers_list(browser, username):
     followers_button = body_elem.find_element_by_xpath(
         '//a[contains(@class, "_t98z6")]')
     followers_button.click()
-    do_sleep(SHORTSLEEP_LOWER, SLEEP_UPPER)
+    do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
     usernames = []
     # This should keep going until there's no more to scroll
     while (len(browser.find_elements_by_class_name("_6e4x5")) <
@@ -58,12 +58,12 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
     following_button = body_elem.find_elements_by_class_name(
         '_t98z6')[2]
     following_button.click()
-    do_sleep(SHORTSLEEP_LOWER, SLEEP_UPPER)
+    do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
     # This should keep going until there's no more to scroll
     while (len(browser.find_elements_by_class_name("_6e4x5")) <
             following_amount):
         scroll_for_loading_list(browser)
-    do_sleep(SHORTSLEEP_LOWER, SLEEP_UPPER)
+    do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
     # Complete list of following elements
     following = browser.find_elements_by_class_name("_6e4x5")
     # Scroll to the top of the list
@@ -118,19 +118,23 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
 
 def scroll_for_loading_list(browser):
     # scroll to the bottom to trigger loading
-    browser.execute_script(
-        "arguments[0].scrollIntoView(true)",
-        browser.find_elements_by_class_name("_6e4x5")[-1])
-    # sleep between 0 and 2 seconds
-    do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
-    # Will throw index out of range if you have less than 5 followers
-    browser.execute_script(
-        "arguments[0].scrollIntoView(true)",
-        browser.find_elements_by_class_name("_6e4x5")[-5])
-    do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
-    browser.execute_script(
-        "arguments[0].scrollIntoView(true)",
-        browser.find_elements_by_class_name("_6e4x5")[-1])
+    try:
+        browser.execute_script(
+            "arguments[0].scrollIntoView(true)",
+            browser.find_elements_by_class_name("_6e4x5")[-1])
+        # sleep between 0 and 2 seconds
+        do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
+        # Will throw index out of range if you have less than 5 followers
+        browser.execute_script(
+            "arguments[0].scrollIntoView(true)",
+            browser.find_elements_by_class_name("_6e4x5")[-5])
+        do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
+        browser.execute_script(
+            "arguments[0].scrollIntoView(true)",
+            browser.find_elements_by_class_name("_6e4x5")[-1])
+    except Exception as e:
+        do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
+        print(e)
 
 
 def do_sleep(start, end):
