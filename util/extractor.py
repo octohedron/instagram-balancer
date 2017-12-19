@@ -67,9 +67,7 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
     # Complete list of following elements
     following = browser.find_elements_by_class_name("_6e4x5")
     # Scroll to the top of the list
-    browser.execute_script(
-        "arguments[0].scrollIntoView(true)",
-        browser.find_elements_by_class_name("_6e4x5")[0])
+    follow_list_scroll(browser, 0)
     # Scroll by 10
     scrolls = math.floor(following_amount / 10) + 1
     # Go by 10
@@ -100,41 +98,36 @@ def unfollow_non_followers(browser, username, following_list, following_amount):
                     unfollow_button.click()
                     do_sleep(SLEEP_LOWER, SLEEP_UPPER)
             except IndexError:
+                print("Index error when trying to unfollow")
                 return
             do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
         # Do a scroll
         try:
             pprint("Try to scroll to " + str(x * 10 + 10) + " item")
-            browser.execute_script(
-                "arguments[0].scrollIntoView(true)",
-                browser.find_elements_by_class_name("_6e4x5")[x * 10 + 10])
+            follow_list_scroll(browser, x * 10 + 10)
         except IndexError:
             index = following_amount - 1
             pprint("Index error, trying to scroll, scrolling to " + str(index))
-            browser.execute_script(
-                "arguments[0].scrollIntoView(true)",
-                browser.find_elements_by_class_name("_6e4x5")[index])
+            follow_list_scroll(browser, index)
 
 
 def scroll_for_loading_list(browser):
     # scroll to the bottom to trigger loading
     try:
-        browser.execute_script(
-            "arguments[0].scrollIntoView(true)",
-            browser.find_elements_by_class_name("_6e4x5")[-1])
-        # sleep between 0 and 2 seconds
+        follow_list_scroll(browser, -2)
         do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
-        # Will throw index out of range if you have less than 5 followers
-        browser.execute_script(
-            "arguments[0].scrollIntoView(true)",
-            browser.find_elements_by_class_name("_6e4x5")[-5])
+        follow_list_scroll(browser, 0)  # Up and down
         do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
-        browser.execute_script(
-            "arguments[0].scrollIntoView(true)",
-            browser.find_elements_by_class_name("_6e4x5")[-1])
+        follow_list_scroll(browser, -2)
     except Exception as e:
         do_sleep(SHORTSLEEP_LOWER, SHORTSLEEP_UPPER)
         print(e)
+
+
+def follow_list_scroll(browser, index):
+    browser.execute_script(
+        "arguments[0].scrollIntoView(true)",
+        browser.find_elements_by_class_name("_6e4x5")[index])
 
 
 def do_sleep(start, end):
